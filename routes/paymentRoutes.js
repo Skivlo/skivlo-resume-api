@@ -6,6 +6,15 @@ const {
     createOrder
 } = require("../controllers/paymentController");
 
-router.post("/create-order", createOrder);
+/*
+========================
+      PAYMENT ROUTES
+========================
+*/
+
+router.post(
+    "/create-order",
+    createOrder
+);
 
 module.exports = router;
