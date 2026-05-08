@@ -6,6 +6,18 @@ const {
     generateResume
 } = require("../controllers/resumeController");
 
-router.post("/generate-resume", generateResume);
+const validateResumeInput = require("../middlewares/validationMiddleware");
+
+/*
+========================
+    RESUME ROUTES
+========================
+*/
+
+router.post(
+    "/generate",
+    validateResumeInput,
+    generateResume
+);
 
 module.exports = router;
