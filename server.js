@@ -3,15 +3,17 @@ const cors = require("cors");
 const helmet = require("helmet");
 
 const resumeRoutes = require("./routes/resumeRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+
 const errorHandler = require("./middlewares/errorMiddleware");
 
 const app = express();
 
-
-
-/* =========================
+/*
+========================
    SECURITY + MIDDLEWARE
-========================= */
+========================
+*/
 
 app.use(express.json());
 
@@ -19,11 +21,11 @@ app.use(cors());
 
 app.use(helmet());
 
-
-
-/* =========================
-   HOME ROUTE
-========================= */
+/*
+========================
+       HOME ROUTE
+========================
+*/
 
 app.get("/", (req, res) => {
 
@@ -35,27 +37,29 @@ app.get("/", (req, res) => {
 
 });
 
-
-
-/* =========================
-   API ROUTES
-========================= */
+/*
+========================
+        API ROUTES
+========================
+*/
 
 app.use("/api/resume", resumeRoutes);
 
+app.use("/api/payment", paymentRoutes);
 
-
-/* =========================
-   GLOBAL ERROR HANDLER
-========================= */
+/*
+========================
+    GLOBAL ERROR HANDLER
+========================
+*/
 
 app.use(errorHandler);
 
-
-
-/* =========================
-   SERVER START
-========================= */
+/*
+========================
+       SERVER START
+========================
+*/
 
 const PORT = process.env.PORT || 5000;
 
