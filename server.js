@@ -3,13 +3,14 @@ const cors = require("cors");
 const helmet = require("helmet");
 
 const resumeRoutes = require("./routes/resumeRoutes");
+const errorHandler = require("./middlewares/errorMiddleware");
 
 const app = express();
 
 
 
 /* =========================
-   MIDDLEWARE
+   SECURITY + MIDDLEWARE
 ========================= */
 
 app.use(express.json());
@@ -41,6 +42,14 @@ app.get("/", (req, res) => {
 ========================= */
 
 app.use("/api/resume", resumeRoutes);
+
+
+
+/* =========================
+   GLOBAL ERROR HANDLER
+========================= */
+
+app.use(errorHandler);
 
 
 
