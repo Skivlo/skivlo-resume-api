@@ -2,12 +2,22 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 
+const connectDatabase = require("./config/mongodb");
+
 const resumeRoutes = require("./routes/resumeRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 
 const errorHandler = require("./middlewares/errorMiddleware");
 
 const app = express();
+
+/*
+========================
+    DATABASE CONNECTION
+========================
+*/
+
+connectDatabase();
 
 /*
 ========================
