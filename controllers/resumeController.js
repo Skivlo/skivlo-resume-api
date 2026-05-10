@@ -1,16 +1,25 @@
 const asyncHandler = require("../utils/asyncHandler");
 
+const Resume = require("../models/Resume");
+
 const {
     generateAIResponse
 } = require("../services/serviceOpenai");
 
+/*
+========================
+     GENERATE RESUME
+========================
+*/
+
 const generateResume = asyncHandler(async (req, res) => {
 
     const {
-        name,
+        fullName,
+        jobRole,
         skills,
-        experience,
         education,
+        experience,
         template,
         plan
     } = req.body;
@@ -18,13 +27,15 @@ const generateResume = asyncHandler(async (req, res) => {
     const prompt = `
 Create a professional resume.
 
-Name: ${name}
+Full Name: ${fullName}
+
+Job Role: ${jobRole}
 
 Skills: ${skills}
 
-Experience: ${experience}
-
 Education: ${education}
+
+Experience: ${experience}
 
 Template Style: ${template}
 `;
@@ -34,10 +45,29 @@ Template Style: ${template}
         plan
     });
 
+    const savedResume = await Resume.create({
+
+        fullName,
+        jobRole,
+        skills,
+        education,
+        experience,
+        template,
+
+        aiModel: aiResponse.model,
+
+        isPremium:
+            plan !== "free",
+
+        resumeContent:
+            aiResponse.content
+
+    });
+
     res.status(200).json({
         success: true,
         message: "Resume generated successfully",
-        data: aiResponse
+        resume: savedResume
     });
 
 });
