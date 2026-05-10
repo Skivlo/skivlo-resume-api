@@ -7,6 +7,7 @@ const connectDatabase = require("./config/mongodb");
 const resumeRoutes = require("./routes/resumeRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const authRoutes = require("./routes/authRoutes");
+const pdfRoutes = require("./routes/pdfRoutes");
 
 const errorHandler = require("./middlewares/errorMiddleware");
 
@@ -59,6 +60,8 @@ app.use("/api/resume", resumeRoutes);
 app.use("/api/payment", paymentRoutes);
 
 app.use("/api/auth", authRoutes);
+
+app.use("/api/pdf", pdfRoutes);
 
 /*
 ========================
