@@ -3,56 +3,123 @@ const mongoose = require("mongoose");
 const resumeSchema = new mongoose.Schema({
 
     userId: {
+
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
+
+        ref: "User",
+
+        default: null
+
     },
 
-    fullName: {
+    name: {
+
         type: String,
+
         required: true
+
     },
 
-    jobRole: {
+    role: {
+
         type: String,
+
         required: true
+
     },
 
     skills: {
-        type: [String],
-        default: []
+
+        type: String,
+
+        required: true
+
     },
 
     education: {
+
         type: String,
-        required: true
+
+        default: ""
+
     },
 
     experience: {
+
         type: String,
-        required: true
+
+        default: ""
+
     },
 
     template: {
+
         type: String,
+
         default: "classic"
+
     },
 
-    aiModel: {
+    plan: {
+
         type: String,
-        default: "basic-ai"
+
+        default: "free"
+
     },
 
-    isPremium: {
-        type: Boolean,
-        default: false
+    aiMode: {
+
+        type: String,
+
+        default: "basic-ai"
+
     },
 
     resumeContent: {
-        type: String
+
+        type: String,
+
+        default: ""
+
+    },
+
+    pdfUrl: {
+
+        type: String,
+
+        default: ""
+
+    },
+
+    watermarkRemoved: {
+
+        type: Boolean,
+
+        default: false
+
+    },
+
+    adsUnlocked: {
+
+        type: Boolean,
+
+        default: false
+
+    },
+
+    boostEnhanced: {
+
+        type: Boolean,
+
+        default: false
+
     }
 
 }, {
+
     timestamps: true
+
 });
 
 module.exports = mongoose.model("Resume", resumeSchema);
