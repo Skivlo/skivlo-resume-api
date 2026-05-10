@@ -1,3 +1,9 @@
+const TOOL_CATEGORIES = {
+
+    RESUME: "resume"
+
+};
+
 const PLANS = {
 
     FREE: "free",
@@ -8,9 +14,27 @@ const PLANS = {
 
 const AI_MODELS = {
 
-    FREE: "gpt-3.5-turbo",
+    FREE: "basic-ai",
 
     PREMIUM: "gpt-4"
+
+};
+
+const RESUME_TEMPLATES = {
+
+    FREE: ["classic", "modern"],
+
+    PREMIUM: [
+
+        "professional",
+
+        "creative",
+
+        "executive",
+
+        "minimal"
+
+    ]
 
 };
 
@@ -24,11 +48,17 @@ const FREE_LIMITS = {
 
     DAILY_RESUME_LIMIT: 1,
 
-    FREE_TEMPLATES: 2
+    FREE_TEMPLATES: 2,
+
+    ADS_AFTER_LIMIT: 2,
+
+    WATERMARK_REMOVE_ADS: 1
 
 };
 
 const BOOST_FEATURES = {
+
+    PRICE: 19,
 
     PREMIUM_TEMPLATE_DOWNLOADS: 3
 
@@ -36,9 +66,13 @@ const BOOST_FEATURES = {
 
 module.exports = {
 
+    TOOL_CATEGORIES,
+
     PLANS,
 
     AI_MODELS,
+
+    RESUME_TEMPLATES,
 
     TEMPLATE_PRICING,
 
