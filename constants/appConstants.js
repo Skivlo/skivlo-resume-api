@@ -1,31 +1,49 @@
-const TOOL_CATEGORIES = {
-    RESUME: "resume",
-    PDF: "pdf-tools",
-    WRITING: "writing-tools"
-};
-
 const PLANS = {
+
     FREE: "free",
-    MINI: "mini",
-    SMART_PRO: "smart-pro",
-    CAREER_PLUS: "career-plus"
+
+    BOOST: "boost"
+
 };
 
 const AI_MODELS = {
-    FREE: "basic-ai",
+
+    FREE: "gpt-3.5-turbo",
+
     PREMIUM: "gpt-4"
+
 };
 
-const RESUME_TEMPLATES = [
-    "classic",
-    "modern",
-    "professional",
-    "creative"
-];
+const TEMPLATE_PRICING = {
+
+    PREMIUM_TEMPLATE: 9
+
+};
+
+const FREE_LIMITS = {
+
+    DAILY_RESUME_LIMIT: 1,
+
+    FREE_TEMPLATES: 2
+
+};
+
+const BOOST_FEATURES = {
+
+    PREMIUM_TEMPLATE_DOWNLOADS: 3
+
+};
 
 module.exports = {
-    TOOL_CATEGORIES,
+
     PLANS,
+
     AI_MODELS,
-    RESUME_TEMPLATES
+
+    TEMPLATE_PRICING,
+
+    FREE_LIMITS,
+
+    BOOST_FEATURES
+
 };
