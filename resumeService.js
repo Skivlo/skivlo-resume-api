@@ -1,21 +1,69 @@
+const {
+
+    AI_MODELS,
+
+    PLANS,
+
+    RESUME_TEMPLATES
+
+} = require("../constants/appConstants");
+
+const getAvailableTemplates = (userPlan = PLANS.FREE) => {
+
+    if (userPlan === PLANS.BOOST) {
+
+        return [
+
+            ...RESUME_TEMPLATES.FREE,
+
+            ...RESUME_TEMPLATES.PREMIUM
+
+        ];
+
+    }
+
+    return RESUME_TEMPLATES.FREE;
+
+};
+
 const generateResumeContent = async (data) => {
 
     const {
+
         name,
+
         skills,
+
         experience,
+
         education,
+
         template,
+
         plan
+
     } = data;
 
-    let aiModel = "basic-ai";
+    const userPlan = plan || PLANS.FREE;
 
-    if (plan === "premium") {
-        aiModel = "gpt-4";
+    const availableTemplates = getAvailableTemplates(userPlan);
+
+    if (!availableTemplates.includes(template)) {
+
+        throw new Error("Template access denied");
+
+    }
+
+    let aiModel = AI_MODELS.FREE;
+
+    if (userPlan === PLANS.BOOST) {
+
+        aiModel = AI_MODELS.PREMIUM;
+
     }
 
     const prompt = `
+
 Create a professional ATS optimized resume.
 
 Name: ${name}
@@ -28,15 +76,26 @@ Education: ${education}
 
 Template Style: ${template}
 
-AI Model: ${aiModel}
+AI Mode: ${aiModel}
+
 `;
 
     return {
+
         aiModel,
+
+        template,
+
         prompt
+
     };
+
 };
 
 module.exports = {
-    generateResumeContent
+
+    generateResumeContent,
+
+    getAvailableTemplates
+
 };
