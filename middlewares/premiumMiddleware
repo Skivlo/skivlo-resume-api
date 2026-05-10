@@ -1,33 +1,45 @@
 const { PLANS } = require("../constants/appConstants");
 
-const premiumMiddleware = (req, res, next) => {
+const checkPremiumAccess = async (req, res, next) => {
 
-    if (!req.user) {
+    try {
 
-        return res.status(401).json({
+        if (!req.user) {
 
-            success: false,
+            return res.status(401).json({
 
-            message: "Login required"
+                success: false,
 
-        });
+                message: "Login required"
+
+            });
+
+        }
+
+        if (req.user.plan !== PLANS.BOOST) {
+
+            return res.status(403).json({
+
+                success: false,
+
+                message: "Boost Resume required"
+
+            });
+
+        }
+
+        next();
+
+    } catch (error) {
+
+        next(error);
 
     }
-
-    if (req.user.plan !== PLANS.BOOST) {
-
-        return res.status(403).json({
-
-            success: false,
-
-            message: "Boost Resume required"
-
-        });
-
-    }
-
-    next();
 
 };
 
-module.exports = premiumMiddleware;
+module.exports = {
+
+    checkPremiumAccess
+
+};
