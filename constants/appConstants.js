@@ -39,8 +39,10 @@ const RESUME_TEMPLATES = {
 };
 
 const TEMPLATE_PRICING = {
-
-    PREMIUM_TEMPLATE: 9
+    modern: 6,
+    professional: 7,
+    executive: 9
+};
 
 };
 
