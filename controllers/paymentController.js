@@ -60,7 +60,7 @@ const verifyPayment = asyncHandler(async (req, res) => {
     const expectedSignature = crypto
         .createHmac(
             "sha256",
-            process.env.RAZORPAY_SECRET
+            process.env.RAZORPAY_KEY_SECRET
         )
         .update(body.toString())
         .digest("hex");
