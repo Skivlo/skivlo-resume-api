@@ -14,9 +14,9 @@ const PLANS = {
 
 const AI_MODELS = {
 
-    FREE: "basic-ai",
+  FREE: "gpt-4.1-mini",
 
-    PREMIUM: "gpt-4"
+  PREMIUM: "gpt-4.1"
 
 };
 
