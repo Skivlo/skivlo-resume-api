@@ -1,45 +1,65 @@
 const openai = require("../config/openai");
 
 const {
+
     AI_MODELS,
+
     PLANS
+
 } = require("../constants/appConstants");
 
 /*
+
 ========================
-   GENERATE AI RESPONSE
+
+GENERATE AI RESPONSE
+
 ========================
+
 */
 
-const generateAIResponse = async ({
+const generateAIResponse = async (({
+
     prompt,
+
     plan
+
 }) => {
 
     let selectedModel = AI_MODELS.FREE;
 
     let systemPrompt = `
+
 You are a professional resume writer.
+
 Create a clean, ATS-friendly, professional resume.
+
 `;
 
-    if (
-        plan === PLANS.SMART_PRO ||
-        plan === PLANS.CAREER_PLUS
-    ) {
+    if (plan === PLANS.BOOST) {
 
         selectedModel = AI_MODELS.PREMIUM;
 
         systemPrompt = `
+
 You are an advanced ATS resume expert.
 
 Create:
+
 - highly optimized resume
-- professional wording
-- strong achievements
+
+- stronger professional wording
+
+- recruiter-focused achievements
+
 - modern formatting
+
 - ATS optimization
+
+- polished presentation
+
 `;
+
     }
 
     const completion = await openai.chat.completions.create({
@@ -47,14 +67,23 @@ Create:
         model: selectedModel,
 
         messages: [
+
             {
+
                 role: "system",
+
                 content: systemPrompt
+
             },
+
             {
+
                 role: "user",
+
                 content: prompt
+
             }
+
         ],
 
         temperature: 0.7
@@ -62,13 +91,19 @@ Create:
     });
 
     return {
+
         success: true,
+
         model: selectedModel,
+
         content: completion.choices[0].message.content
+
     };
 
-};
+});
 
 module.exports = {
+
     generateAIResponse
+
 };
