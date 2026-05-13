@@ -1,6 +1,11 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
+const compression = require("compression");
+const rateLimit = require("express-rate-limit");
+const cookieParser = require("cookie-parser");
 
 const connectDatabase = require("./config/mongodb");
 
@@ -15,7 +20,7 @@ const app = express();
 
 /*
 ========================
-    DATABASE CONNECTION
+DATABASE CONNECTION
 ========================
 */
 
@@ -23,19 +28,55 @@ connectDatabase();
 
 /*
 ========================
-   SECURITY + MIDDLEWARE
+TRUST PROXY
 ========================
 */
 
-app.use(express.json());
-
-app.use(cors());
-
-app.use(helmet());
+app.set("trust proxy", 1);
 
 /*
 ========================
-       HOME ROUTE
+RATE LIMITER
+========================
+*/
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: {
+        success: false,
+        message: "Too many requests. Please try again later."
+    }
+});
+
+/*
+========================
+SECURITY + MIDDLEWARE
+========================
+*/
+
+app.use(helmet());
+
+app.use(cors());
+
+app.use(compression());
+
+app.use(cookieParser());
+
+app.use(express.json({
+    limit: "1mb"
+}));
+
+app.use(express.urlencoded({
+    extended: true,
+    limit: "1mb"
+}));
+
+app.use(limiter);
+
+/*
+========================
+HOME ROUTE
 ========================
 */
 
@@ -51,7 +92,23 @@ app.get("/", (req, res) => {
 
 /*
 ========================
-        API ROUTES
+HEALTH CHECK
+========================
+*/
+
+app.get("/api/health", (req, res) => {
+
+    res.status(200).json({
+        success: true,
+        server: "running",
+        environment: process.env.NODE_ENV
+    });
+
+});
+
+/*
+========================
+API ROUTES
 ========================
 */
 
@@ -65,7 +122,22 @@ app.use("/api/pdf", pdfRoutes);
 
 /*
 ========================
-    GLOBAL ERROR HANDLER
+404 HANDLER
+========================
+*/
+
+app.use("*", (req, res) => {
+
+    res.status(404).json({
+        success: false,
+        message: "Route not found"
+    });
+
+});
+
+/*
+========================
+GLOBAL ERROR HANDLER
 ========================
 */
 
@@ -73,7 +145,7 @@ app.use(errorHandler);
 
 /*
 ========================
-       SERVER START
+SERVER START
 ========================
 */
 
