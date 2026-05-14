@@ -120,14 +120,14 @@ Template Style: ${template}
 
            aiModel: aiResponse.model,
 
-      aiMode:
+ aiMode:
     plan === "free"
         ? "basic-ai"
         : "premium-ai",
 
         resumeContent: aiResponse.content,
 
-        boostEnhanced: plan === PLANS.BOOST
+        boostEnhanced: plan === "premium-upgrade"
 
     });
 
