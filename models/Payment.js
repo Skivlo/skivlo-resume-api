@@ -58,7 +58,7 @@ const paymentSchema = new mongoose.Schema(
 
                 "PREMIUM",
 
-                "PREMIUM_UPGRADE",
+                "premium-upgrade",
 
                 "TEMPLATE"
 
