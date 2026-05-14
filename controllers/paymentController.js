@@ -30,7 +30,7 @@ const createOrder = asyncHandler(async (req, res) => {
         amount,
         plan,
         orderId: order.id,
-        status: "pending"
+        status: "created"
     });
 
     res.status(200).json({
@@ -83,7 +83,7 @@ const verifyPayment = asyncHandler(async (req, res) => {
         },
         {
             paymentId: razorpay_payment_id,
-            status: "completed"
+            status: "paid"
         }
     );
 
