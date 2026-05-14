@@ -30,3 +30,5 @@ temp/
 
 # System files
 *.tmp
+# Testing
+coverage/
