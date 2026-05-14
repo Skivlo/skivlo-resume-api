@@ -21,22 +21,15 @@ const {
 const generateResume = asyncHandler(async (req, res) => {
 
     const {
-
-        fullName,
-
-        jobRole,
-
-        skills,
-
-        education,
-
-        experience,
-
-        template,
-
-        plan
-
-    } = req.body;
+    fullName,
+    jobRole,
+    skills,
+    education,
+    experience,
+    extraDetails,
+    template,
+    plan
+} = req.body;
 
     const user = req.user || null;
 
