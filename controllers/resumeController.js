@@ -115,7 +115,15 @@ Template Style: ${template}
 
         plan: plan || PLANS.FREE,
 
-        aiMode: aiResponse.model,
+        aiModel: aiResponse.model,
+
+
+           aiModel: aiResponse.model,
+
+      aiMode:
+    plan === "free"
+        ? "basic-ai"
+        : "premium-ai",
 
         resumeContent: aiResponse.content,
 
