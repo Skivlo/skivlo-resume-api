@@ -69,9 +69,10 @@ const generateResume = asyncHandler(async (req, res) => {
 
     }
 
-    const prompt = `
+   const prompt = `
+Create a clean ATS optimized resume.
 
-Create a professional ATS optimized resume.
+Return ONLY professional resume content.
 
 Full Name: ${fullName}
 
@@ -83,9 +84,10 @@ Education: ${education}
 
 Experience: ${experience}
 
-Template Style: ${template}
+Additional Details: ${extraDetails || "None"}
 
-`;
+Template Style: ${template}
+`; 
 
     const aiResponse = await generateAIResponse({
 
