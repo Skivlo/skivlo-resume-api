@@ -111,6 +111,8 @@ Template Style: ${template}
 
         experience,
 
+        extradetails,
+
         template,
 
         plan: plan || PLANS.FREE,
