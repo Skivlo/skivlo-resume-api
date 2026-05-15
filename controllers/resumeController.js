@@ -5,22 +5,17 @@ const Resume = require("../models/Resume");
 const User = require("../models/User");
 
 const {
-
-    generateAIResponse
-
+  generateAIResponse
 } = require("../services/serviceOpenai");
 
 const {
-
-    PLANS,
-
-    FREE_LIMITS
-
+  PLANS,
+  FREE_LIMITS
 } = require("../constants/appConstants");
 
 const generateResume = asyncHandler(async (req, res) => {
 
-    const {
+  const {
     fullName,
     jobRole,
     skills,
@@ -29,48 +24,50 @@ const generateResume = asyncHandler(async (req, res) => {
     extraDetails,
     template,
     plan
-} = req.body;
+  } = req.body;
 
-    const user = req.user || null;
+  const user = req.user || null;
 
-    if (user && user.plan === PLANS.FREE) {
+  /*
+  ========================
+        FREE LIMIT
+  ========================
+  */
 
-        const today = new Date().toDateString();
+  if (user && user.plan === PLANS.FREE) {
 
-        const lastDate = user.lastResumeDate
+    const today = new Date().toDateString();
 
-            ? new Date(user.lastResumeDate).toDateString()
+    const lastDate = user.lastResumeDate
+      ? new Date(user.lastResumeDate).toDateString()
+      : null;
 
-            : null;
+    if (today !== lastDate) {
+      user.dailyResumeCount = 0;
+    }
 
-        if (today !== lastDate) {
+    if (
+      user.dailyResumeCount >=
+      FREE_LIMITS.DAILY_RESUME_LIMIT
+    ) {
 
-            user.dailyResumeCount = 0;
-
-        }
-
-        if (
-
-            user.dailyResumeCount >=
-
-            FREE_LIMITS.DAILY_RESUME_LIMIT
-
-        ) {
-
-            return res.status(403).json({
-
-                success: false,
-
-                message: "Daily free resume limit reached"
-
-            });
-
-        }
+      return res.status(403).json({
+        success: false,
+        message: "Daily free resume limit reached"
+      });
 
     }
 
-   const prompt = `
-Create a clean ATS optimized resume.
+  }
+
+  /*
+  ========================
+        AI PROMPT
+  ========================
+  */
+
+  const prompt = `
+Create a clean ATS optimized professional resume.
 
 Return ONLY professional resume content.
 
@@ -87,76 +84,81 @@ Experience: ${experience}
 Additional Details: ${extraDetails || "None"}
 
 Template Style: ${template}
-`; 
+`;
 
-    const aiResponse = await generateAIResponse({
+  const aiResponse = await generateAIResponse({
+    prompt,
+    plan
+  });
 
-        prompt,
+  /*
+  ========================
+        SAVE RESUME
+  ========================
+  */
 
-        plan
+  const savedResume = await Resume.create({
 
-    });
+    userId: user ? user._id : null,
 
-    const savedResume = await Resume.create({
+    name: fullName,
 
-        userId: user ? user._id : null,
+    role: jobRole,
 
-        name: fullName,
+    skills,
 
-        role: jobRole,
+    education,
 
-        skills,
+    experience,
 
-        education,
+    extraDetails,
 
-        experience,
+    template,
 
-        extradetails,
+    plan: plan || PLANS.FREE,
 
-        template,
+    aiModel: aiResponse.model,
 
-        plan: plan || PLANS.FREE,
-
-        aiModel: aiResponse.model,
-
-
-           aiModel: aiResponse.model,
-
- aiMode:
-    plan === "free"
+    aiMode:
+      plan === PLANS.FREE
         ? "basic-ai"
         : "premium-ai",
 
-        resumeContent: aiResponse.content,
+    resumeContent: aiResponse.content,
 
-        boostEnhanced: plan === "premium-upgrade"
+    boostEnhanced:
+      plan === PLANS.PREMIUM_UPGRADE
 
-    });
+  });
 
-    if (user && user.plan === PLANS.FREE) {
+  /*
+  ========================
+      UPDATE FREE COUNT
+  ========================
+  */
 
-        user.dailyResumeCount += 1;
+  if (user && user.plan === PLANS.FREE) {
 
-        user.lastResumeDate = new Date();
+    user.dailyResumeCount += 1;
 
-        await user.save();
+    user.lastResumeDate = new Date();
 
-    }
+    await user.save();
 
-    res.status(200).json({
+  }
 
-        success: true,
+  res.status(200).json({
 
-        message: "Resume generated successfully",
+    success: true,
 
-        resume: savedResume
+    message: "Resume generated successfully",
 
-    });
+    resume: savedResume
+
+  });
 
 });
 
 module.exports = {
-
-    generateResume
-
+  generateResume
 };
